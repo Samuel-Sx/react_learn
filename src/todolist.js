@@ -7,25 +7,36 @@ class ToduList extends Component {
       text: '',
       todo: []
     }
+    this.handleClickDelete = this.handleClickDelete.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleAddClick = this.handleAddClick.bind(this);
   }
   handleInputChange (e) {
-    this.setState({
-      text: e.target.value
-    })
+    const text = e.target.value;
+    this.setState(() => ({ text }))
   }
   handleAddClick (e) {
-    this.setState({
-      todo: [...this.state.todo, this.state.text],
+    this.setState(prevState => ({
+      todo: [...prevState.todo, prevState.text],
       text: ''
-    })
+    }))
   }
   handleClickDelete (index) {
-    console.log(index)
-    let list = [...this.state.todo];
-    list.splice(index, 1)
-    this.setState({
-      todo: list
+    this.setState(prevState => {
+      let todo = [...prevState.todo];
+      todo.splice(index, 1);
+      return { todo }
     })
+  }
+  getTodoItem () {
+    return this.state.todo.map((item, index) => (
+      <TodoList
+        key={index}
+        index={index}
+        deleteFunc={this.handleClickDelete}
+        content={item}
+      />
+    ))
   }
   render () {
     return (
@@ -33,20 +44,11 @@ class ToduList extends Component {
         <div>
           <input
             value={this.state.text}
-            onChange={this.handleInputChange.bind(this)} />
-          <button onClick={this.handleAddClick.bind(this)}>增加</button>
+            onChange={this.handleInputChange} />
+          <button onClick={this.handleAddClick}>增加</button>
         </div>
         <ul>
-          {
-            this.state.todo.map((item, index) => (
-              <TodoList
-                key={index}
-                index={index}
-                deleteFunc={this.handleClickDelete.bind(this)}
-                content={item}
-              />
-            ))
-          }
+          {this.getTodoItem()}
         </ul>
       </Fragment>
     )

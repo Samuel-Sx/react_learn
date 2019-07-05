@@ -6,13 +6,15 @@ class TodoList extends Component {
     this.handleDeleteItem = this.handleDeleteItem.bind(this);
   }
   handleDeleteItem () {
-    this.props.deleteFunc(this.props.index)
+    const { deleteFunc, index } = this.props
+    deleteFunc(index)
   }
   render () {
+    const { content } = this.props;
     return (
-      <li
-        onClick={this.handleDeleteItem}
-      >{this.props.content}</li>
+      <li onClick={this.handleDeleteItem}>
+        {content}
+      </li>
     )
   }
 }
