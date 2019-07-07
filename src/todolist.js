@@ -1,5 +1,7 @@
 import React, { Component, Fragment } from 'react';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import TodoList from './todoitem';
+import './todolist.css';
 class ToduList extends Component {
   constructor(props) {
     super(props);
@@ -30,12 +32,19 @@ class ToduList extends Component {
   }
   getTodoItem () {
     return this.state.todo.map((item, index) => (
-      <TodoList
-        key={index}
-        index={index}
-        deleteFunc={this.handleClickDelete}
-        content={item}
-      />
+      <CSSTransition
+        timeout={500}
+        unmountOnExit
+        appear={true}
+        classNames='fade'
+      >
+        <TodoList
+          key={index}
+          index={index}
+          deleteFunc={this.handleClickDelete}
+          content={item}
+        />
+      </CSSTransition>
     ))
   }
   render () {
@@ -48,7 +57,9 @@ class ToduList extends Component {
           <button onClick={this.handleAddClick}>增加</button>
         </div>
         <ul>
-          {this.getTodoItem()}
+          <TransitionGroup>
+            {this.getTodoItem()}
+          </TransitionGroup>
         </ul>
       </Fragment>
     )

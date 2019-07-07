@@ -9,6 +9,14 @@ class TodoItem extends Component {
     const { deleteFunc, index } = this.props
     deleteFunc(index)
   }
+  shouldComponentUpdate (nextProps, nextStart) {
+
+    if (nextProps.content !== this.props.content) {
+      return true;
+    } else {
+      return false;
+    }
+  }
   render () {
     const { content } = this.props;
     return (
@@ -19,7 +27,7 @@ class TodoItem extends Component {
   }
 }
 
-TodoItem.prototype = {
+TodoItem.prototypes = {
   content: PropTypes.string,
   deleteFunc: PropTypes.func,
   index: PropTypes.number
