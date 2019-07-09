@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { Input, Button, List } from 'antd'
 import { store } from './store';
 import { inputValue, addTodo, deletTodo } from './store/action'
+import TodoItemUI from './todolistUI'
 
 class TodoList extends Component {
     constructor(props) {
@@ -10,28 +10,18 @@ class TodoList extends Component {
         this.handleStoreChange = this.handleStoreChange.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.addTodoItem = this.addTodoItem.bind(this);
+        this.deleteTodoItem = this.deleteTodoItem.bind(this);
         store.subscribe(this.handleStoreChange);
     }
     render () {
         return (
-            <div style={{ marginTop: '10px', marginLeft: '10px' }}>
-                <Input
-                    value={this.state.inputValue}
-                    placeholder='todo info'
-                    style={{ width: '300px' }}
-                    onChange={this.handleInputChange}
-                ></Input>
-                <Button
-                    type="primary"
-                    onClick={this.addTodoItem}
-                >提交</Button>
-                <List
-                    style={{ width: '300px', marginTop: '10px' }}
-                    bordered
-                    dataSource={this.state.todos}
-                    renderItem={(item, index) => (<List.Item onClick={this.deleteTodoItem.bind(this, index)}>{item}</List.Item>)}
-                />
-            </div>
+            <TodoItemUI
+                inputValue={this.state.inputValue}
+                handleInputChange={this.handleInputChange}
+                addTodoItem={this.addTodoItem}
+                deleteTodoItem={this.deleteTodoItem}
+                todos={this.state.todos}
+            ></TodoItemUI>
         )
     }
 
