@@ -1,11 +1,12 @@
 import {
     CHANGE_INPUT_VALUE,
     ADD_TODOLIST,
-    DELETE_TODOLIST
+    DELETE_TODOLIST,
+    RESET_TODOLIST
 } from './actiontypes';
 
 const defaultState = {
-    inputValue: '111',
+    inputValue: '',
     todos: []
 };
 
@@ -27,6 +28,11 @@ export const todoListReducer = (state = defaultState, action) => {
             return {
                 ...state,
                 todos: newTodos
+            }
+        case RESET_TODOLIST:
+            return {
+                ...state,
+                todos: [...action.todos]
             }
         default:
             return state;

@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import { store } from './store';
-import { inputValue, addTodo, deletTodo } from './store/action'
-import TodoItemUI from './todolistUI'
+import { inputValue, addTodo, deletTodo, resetTodoList } from './store/action';
+import TodoItemUI from './todolistUI';
 
 class TodoList extends Component {
     constructor(props) {
@@ -23,6 +23,10 @@ class TodoList extends Component {
                 todos={this.state.todos}
             ></TodoItemUI>
         )
+    }
+
+    componentDidMount () {
+        store.dispatch(resetTodoList())
     }
 
     handleStoreChange () {
