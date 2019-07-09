@@ -20,7 +20,8 @@ export const todoListReducer = (state = defaultState, action) => {
         case ADD_TODOLIST:
             return {
                 ...state,
-                todos: [...state.todos, action.todo]
+                todos: [...state.todos, state.inputValue],
+                inputValue: ''
             }
         case DELETE_TODOLIST:
             let newTodos = [...state.todos]

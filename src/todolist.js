@@ -1,48 +1,67 @@
 import React, { Component } from 'react';
 import { store } from './store';
 import { inputValue, addTodo, deletTodo, resetTodoList } from './store/action';
-import TodoItemUI from './todolistUI';
+import { Input, Button, List } from 'antd'
+import { connect } from 'react-redux';
 
 class TodoList extends Component {
-    constructor(props) {
-        super(props);
-        this.state = store.getState();
-        this.handleStoreChange = this.handleStoreChange.bind(this);
-        this.handleInputChange = this.handleInputChange.bind(this);
-        this.addTodoItem = this.addTodoItem.bind(this);
-        this.deleteTodoItem = this.deleteTodoItem.bind(this);
-        store.subscribe(this.handleStoreChange);
-    }
     render () {
+        const {
+            inputValue,
+            todos,
+            handleInputChange,
+            addTodoItem,
+            deleteTodoItem
+        } = this.props
         return (
-            <TodoItemUI
-                inputValue={this.state.inputValue}
-                handleInputChange={this.handleInputChange}
-                addTodoItem={this.addTodoItem}
-                deleteTodoItem={this.deleteTodoItem}
-                todos={this.state.todos}
-            ></TodoItemUI>
+            <div style={{ marginTop: '10px', marginLeft: '10px' }}>
+                <Input
+                    value={inputValue}
+                    placeholder='todo info'
+                    style={{ width: '300px' }}
+                    onChange={handleInputChange}
+                ></Input>
+                <Button
+                    type="primary"
+                    onClick={addTodoItem}
+                >提交</Button>
+                <List
+                    style={{ width: '300px', marginTop: '10px' }}
+                    bordered
+                    dataSource={todos}
+                    renderItem={(item, index) => (<List.Item onClick={() => { deleteTodoItem(index) }}>{item}</List.Item>)}
+                />
+            </div>
         )
     }
 
     componentDidMount () {
         store.dispatch(resetTodoList())
     }
+}
 
-    handleStoreChange () {
-        this.setState(() => store.getState())
-    }
-    handleInputChange (e) {
-        store.dispatch(inputValue(e.target.value))
-    }
-    addTodoItem () {
-        let todo = this.state.inputValue
-        store.dispatch(addTodo(todo));
-        store.dispatch(inputValue(''));
-    }
-    deleteTodoItem (index) {
-        store.dispatch(deletTodo(index))
+const mapStateToProps = state => {
+    return {
+        inputValue: state.inputValue,
+        todos: state.todos
     }
 }
 
-export default TodoList
+const mapDispatchToProps = dispatch => {
+    return {
+        // 输入事件
+        handleInputChange (e) {
+            dispatch(inputValue(e.target.value))
+        },
+        // 添加待办
+        addTodoItem () {
+            dispatch(addTodo())
+        },
+        // 删除待办
+        deleteTodoItem (index) {
+            dispatch(deletTodo(index))
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TodoList)
